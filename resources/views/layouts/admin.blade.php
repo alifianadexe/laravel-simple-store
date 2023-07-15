@@ -98,12 +98,12 @@
                         <div data-i18n="Page 2">Transactions</div>
                     </a>
                 </li>
-{{--                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'report' ? 'active' : ''}}">--}}
-{{--                    <a href="{{route('admin.report')}}" class="menu-link">--}}
-{{--                        <i class="menu-icon tf-icons ti ti-chart-bar"></i>--}}
-{{--                        <div data-i18n="Page 2">Report</div>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'report' ? 'active' : ''}}">
+                    <a href="{{route('admin.report')}}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-chart-bar"></i>
+                        <div data-i18n="Page 2">Report</div>
+                    </a>
+                </li>
 
                 <li class="menu-header">Master Data</li>
                 <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'products' ? 'active' : ''}}">
