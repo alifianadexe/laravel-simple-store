@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\ProductBrand;
-use App\Models\ProductCategory;
-use App\Models\Transaction;
 use App\Models\Barang;
 use App\Models\SerialNumber;
 use App\Models\TransactionDetail;
@@ -19,7 +15,7 @@ class TransactionsController extends Controller
     {
         $date = request('date') ?? date('Y-m-d');
 
-        $transactions = Transactions::orderBy('created_at', 'desc')->where('tipe_trans', 'SELL')->get();
+        $transactions = Transactions::orderBy('created_at', 'desc')->get();
         // $transactions_pending = Transactions::orderBy('created_at')->where('status', 'pending')->whereDate('created_at', $date)->get();
 
         return view('admin.transaction.index', compact('transactions'));
@@ -44,6 +40,7 @@ class TransactionsController extends Controller
         
         $request->validate([
             'customer' => ['required'],
+            'check_product' => ['required']
         ]);
 
         $transaction_id = Transactions::create([
@@ -63,6 +60,10 @@ class TransactionsController extends Controller
                 'price' => $serialnum->price,
                 'discount' => $request->discount
             ]);
+
+            $serialnum->update([
+                'used' => 1,
+            ]);
         }
 
         return redirect()->back()->with('msg', 'Transaksi Berhasil Dibuat');
@@ -73,38 +74,18 @@ class TransactionsController extends Controller
         $start = date('Y-m-d', strtotime('-14 days', strtotime(date('Y-m-d'))));
         $end = date('Y-m-d');
 
-        // $transactions = Transactions::whereBetween('created_at', [$start, $end])->orderBy('created_at', 'asc')->get();
+        $transactions = TransactionDetail::orderBy('created_at', 'asc')->get();
+        $profits = Barang::all();
 
-        // $profits = $transactions->groupBy('date')->mapWithKeys(function($transactions, $date) {
-        //     $issued_capital = $transactions->filter(fn($transaction) => $transaction->status === 'success')->reduce(fn($total, $transaction) => $total += $transaction->products->reduce(fn($total2, $product) => $total2 += $product->buy_price * $product->pivot->quantity, 0), 0);
-        //     $revenue = $transactions->filter(fn($transaction) => $transaction->status === 'success')->reduce(fn($total, $transaction) => $total += $transaction->products->reduce(fn($total2, $product) => $total2 += $product->pivot->total, 0), 0);
-        //     $profit = $revenue - $issued_capital;
-        //     return [date('d F Y', strtotime($date)) => $profit];
-        // });
+        $barang = Barang::orderBy('product_name')->get();
+        $categories = Barang::all();
+        
+        $products_counted = SerialNumber::where('used', 0)->get();
 
-//        $brands = $transactions->flatMap(fn($transaction) => $transaction->products)->groupBy('brand_id')->mapWithKeys(function($products, $brand_id) {
-//            $brand = ProductBrand::find($brand_id);
-//            return [$brand->name => $products->count()];
-//        })->sortKeys();
+        $popular_products = $products_counted->sortByDesc('created_at')->values()->slice(0, 4);
+        $unpopular_products = $products_counted->sortBy('created_at')->values()->slice(0, 4);
 
-        // $brands = ProductBrand::orderBy('name')->get()->mapWithKeys(function ($brand) use ($transactions) {
-        //     $count = $transactions->flatMap(fn($transaction) => $transaction->products)->filter(fn($product) => $product->brand_id === $brand->id)->count();
-        //     return [$brand->name => $count];
-        // });
 
-        // $categories = ProductCategory::all()->mapWithKeys(function ($category) use ($transactions) {
-        //     $count = $transactions->flatMap(fn($transaction) => $transaction->products)->filter(fn($product) => $product->category_id === $category->id)->count();
-        //     return [$category->name => $count];
-        // });
-
-        // $products_counted = Product::all()->map(function($product) use ($transactions) {
-        //     $product->sold = $transactions->flatMap(fn($transaction) => $transaction->products)->filter(fn($product2) => $product->id == $product2->id)->count();
-        //     return $product;
-        // });
-
-        // $popular_products = $products_counted->sortByDesc('sold')->values()->slice(0, 4);
-        // $unpopular_products = $products_counted->sortBy('sold')->values()->slice(0, 4);
-
-        return view('admin.report');
+        return view('admin.report', compact('profits', 'barang', 'categories', 'popular_products', 'unpopular_products'));
     }
 }

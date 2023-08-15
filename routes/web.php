@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 
 // Admin & Staff Routes
@@ -22,7 +24,7 @@ Route::group(['prefix' => '/admin', 'as' => 'admin.', 'middleware' => ['auth']],
     Route::get('/', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
 
     // Route::resource('/transactions', \App\Http\Controllers\TransactionController::class);
-    Route::get('/report', [\App\Http\Controllers\TransactionController::class, 'report'])->name('report');
+    Route::get('/report', [\App\Http\Controllers\TransactionsController::class, 'report'])->name('report');
 
     Route::resource('/transactions', \App\Http\Controllers\TransactionsController::class);
     Route::resource('/serialnumber', \App\Http\Controllers\SerialNumberController::class);

@@ -46,7 +46,7 @@
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">
-                    Incoming Orders
+                    All Orders
                 </h5>
                 <a href="{{route('admin.transactions.create')}}" class="d-flex align-items-center">Tambah Transaksi</a>
             </div>

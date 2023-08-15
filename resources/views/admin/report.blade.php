@@ -13,99 +13,40 @@
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header border-bottom">
-                <h5 class="mb-0">
-                    Products Sold by Brand
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    Stock Barang
                 </h5>
+                {{-- <a href="{{route('admin.transactions.index')}}" class="d-flex align-items-center">View all transactions <i class="ti ms-2 ti-chevron-right"></i></a> --}}
             </div>
-            <div class="card-body p-4">
-                <div id="brand" style="width: 100%;"></div>
-            </div>
-        </div>
+            <div class="card-body p-4 border-top">
+                <table class="table table-striped datatable">
+                    <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Nama Barang</td>
+                        <td>Brand</td>
+                        <td>Price</td>
+                        <td>Model Barang</td>
+                        <td>Stock</td>
+                        
 
-        <div class="card mb-4">
-            <div class="card-header border-bottom">
-                <h5 class="mb-0">
-                    Products Sold by Category
-                </h5>
-            </div>
-            <div class="card-body p-4">
-                <div id="category" style="width: 100%;"></div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header border-bottom">
-                <h5 class="mb-0">
-                    Most Popular Products
-                </h5>
-            </div>
-            <div class="card-body p-4">
-
-                <div class="row">
-                    @foreach($popular_products as $product)
-                        <div class="col-md-3">
-                            <div class="card shadow-none bg-transparent border-1">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <img src="{{$product->brand->logo}}" alt="{{$product->brand->name}}" style="height: 32px;" class="me-2">
-                                    </div>
-                                    <h5 class="card-title">{{$product->name}}</h5>
-                                    <img class="img-fluid d-flex mx-auto my-3 rounded" src="{{ $product->image }}" alt="{{ $product->name }}">
-                                    <div class="mb-3">
-                                        <h4 class="card-text mb-0">
-                                            {{$product->sold}} <span class="fw-normal">items sold</span>
-                                        </h4>
-                                    </div>
-                                    <div class="row align-items-center d-flex">
-                                        <div class="col-12">
-                                            <a href="javascript:void(0);" class="btn btn-outline-primary card-link w-100 text-center">View Details</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach(\App\Models\Barang::all() as $i => $barang)
+                        <tr>
+                            <td>{{$i+1}}</td>
+                            <td>{{$barang->product_name}}</td>
+                            <td>{{$barang->brand}}</td>
+                            <td>{{$barang->price}}</td>
+                            <td>{{$barang->model_no}}</td>
+                            <td>{{\App\Models\SerialNumber::where('product_id', $barang->id)->where('used', 0)->count()}}</td>  
+                        </tr>
                     @endforeach
-                </div>
-
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header border-bottom">
-                <h5 class="mb-0">
-                    Least Popular Products
-                </h5>
-            </div>
-            <div class="card-body p-4">
-
-                <div class="row">
-                    @foreach($unpopular_products as $product)
-                        <div class="col-md-3">
-                            <div class="card shadow-none bg-transparent border-1">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <img src="{{$product->brand->logo}}" alt="{{$product->brand->name}}" style="height: 32px;" class="me-2">
-                                    </div>
-                                    <h5 class="card-title">{{$product->name}}</h5>
-                                    <img class="img-fluid d-flex mx-auto my-3 rounded" src="{{ $product->image }}" alt="{{ $product->name }}">
-                                    <div class="mb-3">
-                                        <h4 class="card-text mb-0">
-                                            {{$product->sold}} <span class="fw-normal">items sold</span>
-                                        </h4>
-                                    </div>
-                                    <div class="row align-items-center d-flex">
-                                        <div class="col-12">
-                                            <a href="javascript:void(0);" class="btn btn-outline-primary card-link w-100 text-center">View Details</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -113,111 +54,6 @@
 
 @section('js')
     <script>
-        var brandOptions = {
-            series: [
-                {
-                    name: 'Sold',
-                    data: {!! $brands->values() !!}
-                },
-            ],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: {!! $brands->keys() !!},
-            },
-            yaxis: {
-                title: {
-                    text: 'Items Sold'
-                }
-            },
-            colors: [
-                '#353535'
-            ],
-            fill: {
-                opacity: 1
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " items"
-                    }
-                }
-            }
-        };
-
-        var brand = new ApexCharts(document.querySelector("#brand"), brandOptions);
-        brand.render();
-
-        var categoryOptions = {
-            series: [
-                {
-                    name: 'Sold',
-                    data: {!! $categories->values() !!}
-                },
-            ],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: {!! $categories->keys() !!},
-            },
-            yaxis: {
-                title: {
-                    text: 'Items Sold'
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            colors: [
-                '#353535'
-            ],
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " items"
-                    }
-                }
-            }
-        };
-
-        var category = new ApexCharts(document.querySelector("#category"), categoryOptions);
-        category.render();
-
-
         var profitOptions = {
             series: [ {
                 name: "Profit",

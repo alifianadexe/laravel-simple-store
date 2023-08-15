@@ -58,7 +58,7 @@
                                 <a href="{{route('admin.transactions.index')}}" class="btn btn-outline-primary">Cancel</a>
 
                                 <button type="submit" class="btn btn-primary">
-                                    {{isset($brand) ? 'Update' : 'Save'}}
+                                    {{isset($transaction) ? 'Update' : 'Save'}}
                                 </button>
                             </div>
                         </form>
