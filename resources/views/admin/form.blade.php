@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                             <div class="mt-4 d-flex align-items-center justify-content-between">
-                                <a href="{{route('admin.brands.index')}}" class="btn btn-outline-primary">Cancel</a>
+                                <a href="{{route('admin.transactions.index')}}" class="btn btn-outline-primary">Cancel</a>
 
                                 <button type="submit" class="btn btn-primary">
                                     {{isset($brand) ? 'Update' : 'Save'}}
