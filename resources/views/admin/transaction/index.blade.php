@@ -48,29 +48,38 @@
                 <h5 class="card-title mb-0">
                     Incoming Orders
                 </h5>
+                <a href="{{route('admin.transactions.create')}}" class="d-flex align-items-center">Tambah Transaksi</a>
             </div>
             <div class="card-body p-4 border-top">
                 <table class="table table-striped datatable">
                     <thead>
                     <tr>
                         <td>#</td>
-                        <td>Code</td>
-                        <td>Name</td>
-                        <td>Order Date</td>
-                        <td class="text-center">Products Count</td>
-                        <td class="text-end">Total Amount</td>
+                        <td>Tanggal</td>
+                        <td>No Transaction</td>
+                        <td>Customer</td>
+                        <td class="text-center">Tipe Trans  </td>
                         <td class="text-center">Actions</td>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($transactions_pending as $i => $transaction)
+                    @foreach($transactions as $i => $transaction)
                         <tr>
                             <td>{{$i+1}}</td>
-                            <td>{{$transaction->code}}</td>
-                            <td>{{$transaction->customer->name}}</td>
-                            <td>{{$transaction->created_at->diffForHumans()}}</td>
-                            <td class="text-center">{{$transaction->products->count()}}</td>
-                            <td class="text-end">{{\App\Helper\Helper::formatCurrency($transaction->total)}}</td>
+                            <td>{{$transaction->tanggal}}</td>
+                            <td>{{$transaction->no_trans}}</td>
+                            <td>{{$transaction->customer}}</td>
+                            <td class="text-center">
+                                @if($transaction->tipe_trans === 'SELL')
+                                    <span class="badge bg-label-danger">
+                                        SELL
+                                    </span>
+                                @elseif($transaction->tipe_trans === 'BUY')
+                                    <span class="badge bg-label-success">
+                                        BUY
+                                    </span>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 <a href="{{route('admin.transactions.show', $transaction)}}" data-bs-toggle="tooltip" data-bs-title="View details">
                                     <i class="ti ti-eye"></i>
@@ -83,7 +92,7 @@
             </div>
         </div>
 
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">
                     All Processed Orders
@@ -135,6 +144,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div> --}}
     </div>
 @endsection

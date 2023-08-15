@@ -15,39 +15,33 @@
                 <ul class="list-group">
                     <li class="list-group-item p-4 d-flex align-items-center justify-content-between">
                         <div>
-                            <h6 class="mb-1">Code</h6>
+                            <h6 class="mb-1">Transaction Number</h6>
                             <p class="mb-0">
-                                {{$transaction->code}}
+                                {{$transaction->no_trans}}
                             </p>
                         </div>
 
                         <div>
                            <h6 class="mb-1">Customer</h6>
-                            <p class="mb-0">{{$transaction->customer->name}}</p>
+                            <p class="mb-0">{{$transaction->customer}}</p>
                         </div>
 
                         <div>
                             <h6 class="mb-1">Order Date</h6>
                             <div>
-                                {{$transaction->created_at->format('d F Y H:i')}}
+                                {{$transaction->tanggal}}
                             </div>
                         </div>
 
                         <div>
-                            <h6 class="mb-1">Status</h6>
+                            <h6 class="mb-1">Tipe Transaction</h6>
                             <div>
-                                <span class="badge text-capitalize bg-label-{{$transaction->status === 'success' ? 'success' : 'secondary'}}">
-                                    {{$transaction->status}}
+                                <span class="badge text-capitalize bg-label-{{$transaction->tipe_trans === 'BUY' ? 'success' : 'danger'}}">
+                                    {{$transaction->tipe_trans}}
                                 </span>
                             </div>
                         </div>
 
-                        <div>
-                            <h6 class="mb-1">Approved By</h6>
-                            <div>
-                                {{$transaction->status === 'success' ? $transaction->approver->name : '-'}}
-                            </div>
-                        </div>
                     </li>
                 </ul>
             </div>
@@ -56,48 +50,37 @@
                 <h6 class="mb-2">Transaction Products</h6>
                 <ul class="list-group">
 
-                    @foreach($transaction->products as $product)
+                    @foreach($transaction_detail as $detail)
                         <li class="list-group-item p-4">
                             <div class="d-flex gap-3">
-                                <div class="flex-shrink-0">
-                                    <img src="{{$product->image}}" alt="{{$product->name}}" class="w-px-75">
-                                </div>
                                 <div class="flex-grow-1">
                                     <div class="row align-items-center">
                                         <div class="col-md-4">
                                             <a href="javascript:void(0)" class="text-body">
-                                                <p class="mb-1">{{$product->name}}</p>
+                                                <p class="mb-1">{{$detail->barang->product_name}}</p>
                                             </a>
                                             <div class="text-muted d-flex flex-wrap">
                                                 <span class="me-1">Brand:</span>
-                                                <a href="javascript:void(0)" class="me-3">{{$product->brand->name}}</a>
+                                                <a href="javascript:void(0)" class="me-3">{{$detail->barang->brand}}</a>
                                             </div>
                                         </div>
                                         <div class="col-md-4 text-center">
-                                            <small>Qty: {{$product->pivot->quantity}}</small>
+                                            <small>Price: {{$detail->serialnumber->price}}</small>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="text-md-end">
-                                                <div class="my-2 my-lg-4">
-                                                    <span class="text-primary">{{$product->formatCurrency($product->pivot->total)}}</span>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-4 text-center">
+                                            <small>Serial Number: {{$detail->serialnumber->serial_no}}</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </li>
                     @endforeach
-                    <li class="list-group-item p-4 d-flex justify-content-between fw-bold">
-                        <span>Total</span>
-                        <span>{{$product->formatCurrency($transaction->total)}}</span>
-                    </li>
 
                 </ul>
 
             </div>
             <div class="card-body p-4 d-flex justify-content-between mt-3">
-                @if($transaction->status === 'pending')
+                @if($transaction->tipe_trans === 'SELL')
                 <form action="{{route('admin.transactions.update', $transaction)}}" method="POST">
                     @csrf
                     @method('PUT')
@@ -112,7 +95,7 @@
                     <input type="hidden" name="status" value="success">
                     <button type="submit" class="btn btn-primary">Approve Order</button>
                 </form>
-                @elseif($transaction->status === 'success')
+                @elseif($transaction->tipe_trans === 'BUY')
                     <form action="{{route('admin.transactions.update', $transaction)}}" method="POST">
                         @csrf
                         @method('PUT')

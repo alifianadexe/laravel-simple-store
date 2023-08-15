@@ -68,7 +68,7 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
-                <a href="{{route('home')}}" class="app-brand-link">
+                <a href="#" class="app-brand-link">
               <span class="app-brand-logo demo" style="width: calc(100% - 1rem); height: auto;">
                   <img src="{{asset('logo.svg')}}" alt="logo" style="width: 100%;">
               </span>
@@ -98,45 +98,54 @@
                         <div data-i18n="Page 2">Transactions</div>
                     </a>
                 </li>
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'report' ? 'active' : ''}}">
-                    <a href="{{route('admin.report')}}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-chart-bar"></i>
-                        <div data-i18n="Page 2">Report</div>
-                    </a>
-                </li>
 
+                @if(auth()->user()->role_id == 4)
+                    <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'report' ? 'active' : ''}}">
+                        <a href="{{route('admin.report')}}" class="menu-link">
+                            <i class="menu-icon tf-icons ti ti-chart-bar"></i>
+                            <div data-i18n="Page 2">Report</div>
+                        </a>
+                    </li>
+                @endif
+                
                 <li class="menu-header">Master Data</li>
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'products' ? 'active' : ''}}">
+                {{-- <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'products' ? 'active' : ''}}">
                     <a href="{{route('admin.products.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-box"></i>
                         <div data-i18n="Page 2">Products</div>
                     </a>
+                </li> --}}
+                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'serialnumber' ? 'active' : ''}}">
+                    <a href="{{route('admin.serialnumber.index')}}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-box"></i>
+                        <div data-i18n="Page 2">Serial Number</div>
+                    </a>
                 </li>
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'categories' ? 'active' : ''}}">
+                {{-- <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'categories' ? 'active' : ''}}">
                     <a href="{{route('admin.categories.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-category"></i>
                         <div data-i18n="Page 2">Categories</div>
                     </a>
-                </li>
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'brands' ? 'active' : ''}}">
-                    <a href="{{route('admin.brands.index')}}" class="menu-link">
+                </li> --}}
+                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'barang' ? 'active' : ''}}">
+                    <a href="{{route('admin.barang.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-shoe"></i>
-                        <div data-i18n="Page 2">Brands</div>
+                        <div data-i18n="Page 2">Barang</div>
                     </a>
                 </li>
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'customers' ? 'active' : ''}}">
+                {{-- <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'customers' ? 'active' : ''}}">
                     <a href="{{route('admin.customers.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-user-plus"></i>
                         <div data-i18n="Page 2">Customers</div>
                     </a>
-                </li>
+                </li> --}}
                 @if(auth()->user()->role_id == 1)
-                <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'users' ? 'active' : ''}}">
+                {{-- <li class="menu-item {{explode('.', request()->route()->getName())[1] == 'users' ? 'active' : ''}}">
                     <a href="{{route('admin.users.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-users"></i>
                         <div data-i18n="Page 2">Users</div>
                     </a>
-                </li>
+                </li> --}}
                 @endif
             </ul>
         </aside>

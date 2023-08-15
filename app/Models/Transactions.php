@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductBrand extends Model
+class Transactions extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    
+    protected $table = 'tbl_transaction';
 
-    public function getLogoAttribute($image)
+
+    public function detail()
     {
-        return asset('storage' . $image);
+        return $this->belongsTo(TransactionDetail::class, 'transaction_id');
     }
 }
