@@ -31,6 +31,13 @@ class UserSeeder extends Seeder
                 'password' => bcrypt('admin2')
             ],
             [
+                'name' => 'Super Admin',
+                'role_id' => 4,
+                'sex' => 'Female',
+                'username' => 'superadmin',
+                'password' => bcrypt('admin')
+            ],
+            [
                 'name' => 'Staff 1',
                 'role_id' => 2,
                 'sex' => 'Male',

@@ -25,6 +25,9 @@ class RoleSeeder extends Seeder
             [
                 'name' => 'Customer',
             ],
+            [
+                'name' => 'Super Admin',
+            ],
         ];
 
         foreach ($roles as $role) {
